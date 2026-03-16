@@ -1,6 +1,6 @@
-# KV Cache 策略性能对比分析
+# KV Cache Strategy Performance Benchmark Analysis
 
-## 1. 数据概览
+## 1. Data Overview
 
 | name | prompt_tokens | output_tokens | max_num_batched_tokens | ttft_ms | tpot_ms |
 |------|--------------|---------------|------------------------|---------|---------|
@@ -19,9 +19,9 @@
 
 ---
 
-## 2. 分析角度：策略对比
+## 2. Strategy Comparison
 
-### 2.1 TTFT（首 token 延迟）对比
+### 2.1 TTFT (Time to First Token) Comparison
 
 | prompt_tokens | eviction | kvcrush | ovgenai | sparse |
 |--------------|-----------|----------|---------|--------|
@@ -30,9 +30,9 @@
 | 20000 | - | - | 7831.55 | **3075.95** |
 | 30000 | - | - | 16302.61 | **5105.02** |
 
-**最优策略**：所有 prompt 长度下，**sparse** 的 TTFT 都是最优的。
+**Best Strategy**: **sparse** has the best TTFT at all prompt lengths.
 
-### 2.2 TPOT（每 token 延迟）对比
+### 2.2 TPOT (Time Per Output Token) Comparison
 
 | prompt_tokens | eviction | kvcrush | ovgenai | sparse |
 |--------------|-----------|----------|---------|--------|
@@ -41,142 +41,142 @@
 | 20000 | - | - | 29.28 | **22.02** |
 | 30000 | - | - | 34.52 | **22.35** |
 
-**最优策略**：
-- 小 prompt (5k-10k)：**eviction** TPOT 最优
-- 大 prompt (20k-30k)：**sparse** TPOT 最优
+**Best Strategy**:
+- Small prompt (5k-10k): **eviction** has the best TPOT
+- Large prompt (20k-30k): **sparse** has the best TPOT
 
 ---
 
-## 3. 扩展性分析
+## 3. Scalability Analysis
 
-### 3.1 性能随 prompt_tokens 增长变化
+### 3.1 Performance vs Prompt Tokens Growth
 
 #### ovgenai
-| prompt_tokens | TTFT (ms) | TPOT (ms) | 相比上阶段增长 |
-|--------------|-----------|-----------|---------------|
-| 5000 | 890.28 | 21.37 | (基准) |
+| prompt_tokens | TTFT (ms) | TPOT (ms) | Growth vs Previous |
+|--------------|-----------|-----------|-------------------|
+| 5000 | 890.28 | 21.37 | (baseline) |
 | 10000 | 2479.83 | 24.05 | TTFT: 2.79x |
 | 20000 | 7831.55 | 29.28 | TTFT: 3.16x |
 | 30000 | 16302.61 | 34.52 | TTFT: 2.08x |
 
 #### sparse
-| prompt_tokens | TTFT (ms) | TPOT (ms) | 相比上阶段增长 |
-|--------------|-----------|-----------|---------------|
-| 5000 | 658.78 | 21.69 | (基准) |
+| prompt_tokens | TTFT (ms) | TPOT (ms) | Growth vs Previous |
+|--------------|-----------|-----------|-------------------|
+| 5000 | 658.78 | 21.69 | (baseline) |
 | 10000 | 1379.67 | 21.84 | TTFT: 2.09x |
 | 20000 | 3075.95 | 22.02 | TTFT: 2.23x |
 | 30000 | 5105.02 | 22.35 | TTFT: 1.66x |
 
-### 3.2 线性 vs 实际增长对比
+### 3.2 Linear vs Actual Growth
 
-**ovgenai (以 5k 为基准)**:
+**ovgenai (baseline: 5k)**:
 
-| prompt_tokens | 实际TTFT | 线性预期 | 偏差倍数 |
-|--------------|-----------|----------|---------|
+| prompt_tokens | Actual TTFT | Linear Expected | Deviation |
+|--------------|-------------|-----------------|-----------|
 | 5000 | 890.28 | 890.28 | 1.00x |
 | 10000 | 2479.83 | 1780.56 | **1.39x** |
 | 20000 | 7831.55 | 3561.12 | **2.20x** |
 | 30000 | 16302.61 | 5341.68 | **3.05x** |
 
-**sparse (以 5k 为基准)**:
+**sparse (baseline: 5k)**:
 
-| prompt_tokens | 实际TTFT | 线性预期 | 偏差倍数 |
-|--------------|-----------|----------|---------|
+| prompt_tokens | Actual TTFT | Linear Expected | Deviation |
+|--------------|-------------|-----------------|-----------|
 | 5000 | 658.78 | 658.78 | 1.00x |
 | 10000 | 1379.67 | 1317.56 | **1.05x** |
 | 20000 | 3075.95 | 2635.12 | **1.17x** |
 | 30000 | 5105.02 | 3952.68 | **1.29x** |
 
-### 3.3 线性拟合结果
+### 3.3 Linear Fitting Results
 
 - **ovgenai**: TTFT = 0.618 × prompt - 3172 (R²=0.973)
 - **sparse**: TTFT = 0.178 × prompt - 340 (R²=0.996)
 
-sparse 的斜率 (0.178) 远小于 ovgenai (0.618)，说明其扩展性更好。
+sparse has a much smaller slope (0.178) than ovgenai (0.618), indicating better scalability.
 
 ---
 
-## 5. TPOT 稳定性分析
+## 4. TPOT Stability Analysis
 
-| 策略 | 5k TPOT | 30k TPOT | 增长 |
-|------|---------|----------|------|
+| Strategy | 5k TPOT | 30k TPOT | Growth |
+|----------|---------|----------|--------|
 | sparse | 21.69ms | 22.35ms | +3% |
 | ovgenai | 21.37ms | 34.52ms | **+62%** |
 
-**结论**: sparse 的 TPOT 基本不随 prompt 长度变化，而 ovgenai 的 TPOT 会随 prompt 增长而恶化。
+**Conclusion**: sparse's TPOT remains stable regardless of prompt length, while ovgenai's TPOT degrades significantly with longer prompts.
 
 ---
 
-## 5. TTFT vs TPOT 权衡分析
+## 5. TTFT vs TPOT Trade-off Analysis
 
-### 5.1 各策略 TTFT/TPOT 比率
+### 5.1 TTFT/TPOT Ratio by Strategy
 
-| 策略 | 平均TTFT | 最优TPOT | TTFT/TPOT比率 |
-|------|-----------|----------|---------------|
+| Strategy | Avg TTFT | Best TPOT | TTFT/TPOT Ratio |
+|----------|----------|-----------|-----------------|
 | sparse | 2554.86ms | 21.69ms | **117.8** |
 | ovgenai | 6876.07ms | 21.37ms | 321.8 |
 | kvcrush | 11487.61ms | 20.02ms | 573.8 |
 | eviction | 11488.91ms | 19.56ms | 587.4 |
 
-**解读**: TTFT/TPOT 比率越低，表示首 token 和解码延迟越均衡。
+**Interpretation**: Lower TTFT/TPOT ratio indicates more balanced first-token and decoding latency.
 
-### 5.2 场景推荐
+### 5.2 Scenario Recommendations
 
-#### 实时交互场景 (TTFT权重80%, TPOT权重20%)
+#### Real-time Interaction (TTFT weight: 80%, TPOT weight: 20%)
 
-| prompt_tokens | 推荐排名 |
-|--------------|---------|
+| prompt_tokens | Recommendation Ranking |
+|--------------|------------------------|
 | 5000 | sparse > ovgenai > eviction > kvcrush |
 | 10000 | sparse > ovgenai > eviction > kvcrush |
 | 20000 | sparse > ovgenai |
 | 30000 | sparse > ovgenai |
 
-#### 批量生成场景 (TPOT权重80%, TTFT权重20%)
+#### Batch Generation (TPOT weight: 80%, TTFT weight: 20%)
 
-| prompt_tokens | 推荐排名 |
-|--------------|---------|
+| prompt_tokens | Recommendation Ranking |
+|--------------|------------------------|
 | 5000 | eviction > kvcrush > ovgenai > sparse |
 | 10000 | eviction > kvcrush > sparse > ovgenai |
 | 20000 | sparse > ovgenai |
 | 30000 | sparse > ovgenai |
 
-### 5.3 权衡总结
+---
 
-| 场景 | 推荐策略 | 原因 |
-|------|---------|------|
-| 实时对话/搜索 | **sparse** | TTFT 最优，响应快 |
-| 批量文案生成 | **eviction** | TPOT 最低，吞吐高 |
-| 长文本生成 | **sparse** | TPOT 稳定不随长度恶化 |
-| 综合最优 | **sparse** | 各方面均衡，无明显短板 |
+## 6. Key Conclusions
+
+### 6.1 Strategy Selection Guide
+
+| Scenario | Recommended Strategy | Reason |
+|----------|---------------------|--------|
+| Short prompt (≤10k) + TPOT focus | eviction | Lowest TPOT (~19.5ms) |
+| Long prompt (≥20k) | sparse | Best TTFT & TPOT balance |
+| Best overall | **sparse** | Best TTFT, decent TPOT |
+| Avoid | eviction/kvcrush | TTFT too high (4-18s) |
+
+### 6.2 Core Insights
+
+1. **sparse has the best scalability**: TTFT grows only 7.75x from 5k to 30k, while ovgenai grows 18.31x
+2. **eviction/kvcrush has the best TPOT** (~20ms), but TTFT is too high (4-18 seconds) - suitable for scenarios where first-token latency is not critical
+3. **sparse is the best choice for long prompts**: Balanced TTFT and TPOT performance
+
+### 6.3 Trade-off Summary
+
+| Scenario | Recommended Strategy | Reason |
+|----------|---------------------|--------|
+| Real-time chat/search | **sparse** | Best TTFT, fast response |
+| Batch text generation | **eviction** | Lowest TPOT, high throughput |
+| Long text generation | **sparse** | Stable TPOT regardless of length |
+| Best balanced | **sparse** | No obvious weaknesses |
 
 ---
 
-## 6. 关键结论
+## 7. Generated Charts
 
-### 4.1 策略选择建议
-
-| 场景 | 推荐策略 | 原因 |
-|------|---------|------|
-| 短 prompt (≤10k) + 注重 TPOT | eviction | TPOT 最低 (~19.5ms) |
-| 长 prompt (≥20k) | sparse | TTFT 和 TPOT 均衡，扩展性好 |
-| 综合最优 | **sparse** | TTFT 始终最优，TPOT 也不差 |
-| 避免使用 | eviction/kvcrush | TTFT 太高（4-18秒） |
-
-### 4.2 核心洞察
-
-1. **sparse 策略扩展性最好**：TTFT 从 5k→30k 只增长 7.75x，而 ovgenai 增长 18.31x
-2. **eviction/kvcrush TPOT 最快**（~20ms），但 TTFT 太慢（4-18秒），适合对首延迟不敏感的场景
-3. **sparse 在大 prompt 场景综合最优**：TTFT 和 TPOT 都比较均衡
+- `strategy_comparison.png` - Line chart comparison
+- `strategy_bar_chart.png` - Bar chart comparison
+- `scalability_analysis.png` - Scalability analysis charts
+- `tradeoff_analysis.png` - TTFT vs TPOT trade-off charts
 
 ---
 
-## 7. 生成的分析图表
-
-- `strategy_comparison.png` - 折线图对比
-- `strategy_bar_chart.png` - 柱状图对比
-- `scalability_analysis.png` - 扩展性分析图表
-- `tradeoff_analysis.png` - TTFT vs TPOT 权衡分析图表
-
----
-
-*分析日期: 2026-03-16*
+*Analysis Date: 2026-03-16*
