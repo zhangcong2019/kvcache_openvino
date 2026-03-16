@@ -96,7 +96,7 @@ sparse 的斜率 (0.178) 远小于 ovgenai (0.618)，说明其扩展性更好。
 
 ---
 
-## 4. TPOT 稳定性分析
+## 5. TPOT 稳定性分析
 
 | 策略 | 5k TPOT | 30k TPOT | 增长 |
 |------|---------|----------|------|
@@ -107,7 +107,51 @@ sparse 的斜率 (0.178) 远小于 ovgenai (0.618)，说明其扩展性更好。
 
 ---
 
-## 4. 关键结论
+## 5. TTFT vs TPOT 权衡分析
+
+### 5.1 各策略 TTFT/TPOT 比率
+
+| 策略 | 平均TTFT | 最优TPOT | TTFT/TPOT比率 |
+|------|-----------|----------|---------------|
+| sparse | 2554.86ms | 21.69ms | **117.8** |
+| ovgenai | 6876.07ms | 21.37ms | 321.8 |
+| kvcrush | 11487.61ms | 20.02ms | 573.8 |
+| eviction | 11488.91ms | 19.56ms | 587.4 |
+
+**解读**: TTFT/TPOT 比率越低，表示首 token 和解码延迟越均衡。
+
+### 5.2 场景推荐
+
+#### 实时交互场景 (TTFT权重80%, TPOT权重20%)
+
+| prompt_tokens | 推荐排名 |
+|--------------|---------|
+| 5000 | sparse > ovgenai > eviction > kvcrush |
+| 10000 | sparse > ovgenai > eviction > kvcrush |
+| 20000 | sparse > ovgenai |
+| 30000 | sparse > ovgenai |
+
+#### 批量生成场景 (TPOT权重80%, TTFT权重20%)
+
+| prompt_tokens | 推荐排名 |
+|--------------|---------|
+| 5000 | eviction > kvcrush > ovgenai > sparse |
+| 10000 | eviction > kvcrush > sparse > ovgenai |
+| 20000 | sparse > ovgenai |
+| 30000 | sparse > ovgenai |
+
+### 5.3 权衡总结
+
+| 场景 | 推荐策略 | 原因 |
+|------|---------|------|
+| 实时对话/搜索 | **sparse** | TTFT 最优，响应快 |
+| 批量文案生成 | **eviction** | TPOT 最低，吞吐高 |
+| 长文本生成 | **sparse** | TPOT 稳定不随长度恶化 |
+| 综合最优 | **sparse** | 各方面均衡，无明显短板 |
+
+---
+
+## 6. 关键结论
 
 ### 4.1 策略选择建议
 
@@ -126,11 +170,12 @@ sparse 的斜率 (0.178) 远小于 ovgenai (0.618)，说明其扩展性更好。
 
 ---
 
-## 5. 生成的分析图表
+## 7. 生成的分析图表
 
 - `strategy_comparison.png` - 折线图对比
 - `strategy_bar_chart.png` - 柱状图对比
 - `scalability_analysis.png` - 扩展性分析图表
+- `tradeoff_analysis.png` - TTFT vs TPOT 权衡分析图表
 
 ---
 
