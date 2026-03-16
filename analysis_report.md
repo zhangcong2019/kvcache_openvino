@@ -45,6 +45,10 @@
 - Small prompt (5k-10k): **eviction** has the best TPOT
 - Large prompt (20k-30k): **sparse** has the best TPOT
 
+![Strategy Comparison](./strategy_comparison.png)
+
+![Strategy Bar Chart](./strategy_bar_chart.png)
+
 ---
 
 ## 3. Scalability Analysis
@@ -94,6 +98,8 @@
 
 sparse has a much smaller slope (0.178) than ovgenai (0.618), indicating better scalability.
 
+![Scalability Analysis](./scalability_analysis.png)
+
 ---
 
 ## 4. TPOT Stability Analysis
@@ -139,6 +145,8 @@ sparse has a much smaller slope (0.178) than ovgenai (0.618), indicating better 
 | 10000 | eviction > kvcrush > sparse > ovgenai |
 | 20000 | sparse > ovgenai |
 | 30000 | sparse > ovgenai |
+
+![Trade-off Analysis](./tradeoff_analysis.png)
 
 ---
 
