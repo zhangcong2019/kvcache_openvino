@@ -117,7 +117,7 @@ for name in ['ovgenai', 'sparse']:
     # 添加线性参考线
     base = subset[subset['prompt_tokens']==5000]['ttft_ms'].values[0]
     x_vals = subset['prompt_tokens'].values
-    ax1.plot(x_vals, base * (x_vals / 5000), '--', alpha=0.5, label=f'{name} (线性参考)')
+    ax1.plot(x_vals, base * (x_vals / 5000), '--', alpha=0.5, label=f'{name} (linear ref)')
     
 ax1.set_xlabel('Prompt Tokens', fontsize=12)
 ax1.set_ylabel('TTFT (ms)', fontsize=12)
@@ -146,7 +146,7 @@ for name in ['ovgenai', 'sparse']:
     ax3.plot(prompt_ratios, normalized, marker='o', label=name, linewidth=2, markersize=8)
 
 # 添加理想线性增长参考
-ax3.plot([1, 2, 4, 6], [1, 2, 4, 6], 'k--', alpha=0.5, label='理想线性')
+ax3.plot([1, 2, 4, 6], [1, 2, 4, 6], 'k--', alpha=0.5, label='Ideal Linear')
 ax3.set_xlabel('Prompt Tokens Multiplier', fontsize=12)
 ax3.set_ylabel('TTFT Growth Multiplier', fontsize=12)
 ax3.set_title('TTFT Growth vs Prompt Growth (Normalized)', fontsize=14)
@@ -168,7 +168,7 @@ for name in ['ovgenai', 'sparse']:
     
     ax4.plot(x_vals, deviation, marker='o', label=name, linewidth=2, markersize=8)
 
-ax4.axhline(y=1, color='k', linestyle='--', alpha=0.5, label='理想线性')
+ax4.axhline(y=1, color='k', linestyle='--', alpha=0.5, label='Ideal Linear')
 ax4.set_xlabel('Prompt Tokens', fontsize=12)
 ax4.set_ylabel('Actual / Linear Expected', fontsize=12)
 ax4.set_title('TTFT Deviation from Linear', fontsize=14)
