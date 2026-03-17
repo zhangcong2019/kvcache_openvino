@@ -1,8 +1,8 @@
-# LiveCodeBench 代码生成评测结果报告
+# LiveCodeBench Code Generation Evaluation Results Report
 
-## 📊 数据概览
+## 📊 Data Overview
 
-| 模型 | 框架 | Pass@1 |
+| Model | Framework | Pass@1 |
 |------|------|--------|
 | Qwen3-30B-A3B-Instruct-2507 | vllm | **0.683** |
 | Qwen2.5-7B-Instruct | vllm | 0.367 |
@@ -13,13 +13,13 @@
 
 ---
 
-## 📈 可视化分析
+## 📈 Visualization Analysis
 
 ![Pass@1 Results](results.png)
 
 
 
-### Qwen2.5-7B 各框架性能排名
+### Qwen2.5-7B Framework Performance Rankings
 
 ```
 1st  eviction   ████████████████████ 0.325  +16.1%
@@ -30,22 +30,22 @@
 
 ---
 
-## 🔍 关键发现
+## 🔍 Key Findings
 
-### 1. 模型规模影响显著
-- **Qwen3-30B (vllm)** 达到 **68.3%** Pass@1，领先 Qwen2.5-7B 约 **31.6 个百分点**
-- 大模型在代码生成任务上优势明显
+### 1. Model Size Impact is Significant
+- **Qwen3-30B (vllm)** achieves **68.3%** Pass@1, leading Qwen2.5-7B by approximately **31.6 percentage points**
+- Large models show clear advantages in code generation tasks
 
-
----
-
-## 📝 结论
-
-1. **vllm** 框架在代码生成任务上表现最佳
-2. 大模型 (30B) 显著优于小模型 (7B)
-3. 在 7B 模型中，稀疏化方案 **eviction** > **kvcrush** > **ovgenai** > **sparcity**
-4. openvino相比 vllm 仍有 **11%-24%** 的性能差距，可能原因vllm是fp16模型，openvino genai是int8模型
 
 ---
 
-*报告生成时间: 2026-03-17*
+## 📝 Conclusions
+
+1. **vllm** framework performs best on code generation tasks
+2. Large models (30B) significantly outperform small models (7B)
+3. Among 7B models, sparsification schemes rank as **eviction** > **kvcrush** > **ovgenai** > **sparcity**
+4. OpenVINO still has a **11%-24%** performance gap compared to vllm, possibly because vllm uses FP16 models while OpenVINO GenAI uses INT8 models
+
+---
+
+*Report generated: 2026-03-17*
