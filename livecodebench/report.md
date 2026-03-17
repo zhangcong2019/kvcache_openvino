@@ -18,7 +18,6 @@
 ![Pass@1 Results](results.png)
 
 
-```
 
 ### Qwen2.5-7B 各框架性能排名
 
