@@ -1,18 +1,18 @@
-# Max Batch 4K 性能测试报告
+# Max Batch 4K Performance Test Report
 
-## 📊 测试配置
+## 📊 Test Configuration
 
 - **Prompt Tokens:** 10000
 - **Output Tokens:** 1024
-- **测试框架:** ovgenai, sparse, eviction, kvcrush
+- **Tested Frameworks:** ovgenai, sparse, eviction, kvcrush
 
 ---
 
-## 📈 TTFT (Time To First Token) 分析
+## 📈 TTFT (Time To First Token) Analysis
 
 ![TTFT Chart](ttft_chart.png)
 
-### TTFT 汇总 (ms)
+### TTFT Summary (ms)
 
 | max_num_batched_tokens | ovgenai | sparse | eviction | kvcrush |
 |------------------------|---------|--------|----------|---------|
@@ -22,51 +22,44 @@
 | 1024                   | 2,480   | 1,380  | 18,189  | 18,188  |
 | 4096                   | 2,257   | 1,268  | -        | -        |
 
-### 关键发现
+### Key Findings
 
-1. **ovgenai/sparse**: TTFT 随 batch size 增加显著下降，4096 时仅 ~1.3-2.3s
-2. **eviction/kvcrush**: TTFT 相对稳定，batch size 影响较小，始终在 18-21s
-3. **batch=64** 是分水岭：ovgenai/sparse 在此点开始大幅优化
+1. **ovgenai/sparse**: TTFT decreases significantly as batch size increases, reaching only ~1.3-2.3s at 4096.
+2. **eviction/kvcrush**: TTFT is relatively stable, with limited impact from batch size, consistently around 18-21s.
+3. **batch=64** is a turning point: ovgenai/sparse begin to improve substantially from this point onward.
 
 ---
 
-## ⚡ TPOT (Time Per Output Token) 分析
+## ⚡ TPOT (Time Per Output Token) Analysis
 
 ![TPOT Chart](tpot_chart.png)
 
-### TPOT 汇总 (ms)
+### TPOT Summary (ms)
 
 | max_num_batched_tokens | ovgenai | sparse | eviction | kvcrush |
-|------------------------|---------|--------|----------|---------|
+| ---------------------- | ------- | ------ | -------- | ------- |
 | 1                      | 24.00   | 21.79  | 19.42    | 19.49   |
 | 4                      | 24.01   | 21.82  | 19.58    | 20.05   |
 | 64                     | 24.01   | 21.81  | 19.57    | 20.07   |
 | 1024                   | 24.05   | 21.84  | 19.58    | 20.06   |
-| 4096                   | 24.02   | 21.83  | -        | -        |
+| 4096                   | 24.02   | 21.83  | -        | -       |
 
-### 关键发现
+### Key Findings
 
-1. **TPOT 相对稳定**: 各框架的 TPOT 受 batch size 影响很小
-2. **框架差异明显**:
-   - ovgenai: ~24ms (最慢)
+1. **TPOT is relatively stable**: TPOT across frameworks is minimally affected by batch size.
+2. **Clear framework differences**:
+   - ovgenai: ~24ms (slowest)
    - sparse: ~21.8ms
-   - eviction/kvcrush: ~19.5-20ms (最快)
-3. eviction/kvcrush 在 TPOT 上有明显优势
+   - eviction/kvcrush: ~19.5-20ms (fastest)
+3. eviction/kvcrush show a clear advantage in TPOT.
+4. max_num_batched_tokens will affect memory usage, cause OOM.
 
 ---
 
-## 🎯 结论
+## 🎯 Conclusion
 
-| 指标 | 最优框架 | 说明 |
-|------|----------|------|
-| TTFT (大 batch) | **sparse** | batch=4096 时仅 1.27s |
-| TTFT (小 batch) | **eviction/kvcrush** | batch=1-4 时约 69-195s |
-| TPOT | **eviction/kvcrush** | ~19.5ms，最快 |
-
-**推荐场景**:
-- **高并发**: 用 sparse/ovgenai (TTFT 短)
-- **低延迟**: 用 eviction/kvcrush (TPOT 短)
+Batch token count significantly impacts TTFT. MTP and speculative decoding can provide performance gains.
 
 ---
 
-*报告更新: 2026-03-17*
+*Report updated: 2026-03-17*
