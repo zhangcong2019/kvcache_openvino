@@ -35,6 +35,9 @@
 | eviction | 19.58ms | 19.49ms | **-0.46%** |
 | kvcrush | 20.06ms | 20.00ms | **-0.30%** |
 
+![TTFT vs TPOT Impact](./output_tokens_impact.png)
+![Change Percentage](./output_tokens_change_pct.png)
+
 ---
 
 ## 3. Key Findings
@@ -47,37 +50,15 @@
 
 ### 3.2 TPOT Impact is Minimal
 
-| Strategy | TPOT Sensitivity |
-|----------|-----------------|
-| ovgenai | +3.16% (slight increase) |
-| sparse | +0.09% (negligible) |
+| Strategy | TPOT Sensitivity            |
+| -------- | --------------------------- |
+| ovgenai  | +3.16% (slight increase)    |
+| sparse   | +0.09% (negligible)         |
 | eviction | -0.46% (slight improvement) |
-| kvcrush | -0.30% (negligible) |
+| kvcrush  | -0.30% (negligible)         |
 
 - Only ovgenai shows a noticeable but still small increase (+3.16%)
 - Other strategies remain essentially unchanged
-
----
-
-## 4. Conclusion
-
-**output_tokens has minimal impact on both TTFT and TPOT:**
-
-1. **TTFT independence**: First-token latency is determined solely by prompt processing, not by how many tokens will be generated
-
-2. **Stable TPOT**: The per-token latency remains stable regardless of output length
-
-3. **Strategy-agnostic**: All KV cache strategies show consistent behavior across different output_tokens values
-
-4. **Practical implication**: When optimizing for KV cache strategies, output_tokens does not need to be a primary consideration
-
----
-
-## 5. Generated Charts
-
-![TTFT vs TPOT Impact](./output_tokens_impact.png)
-
-![Change Percentage](./output_tokens_change_pct.png)
 
 ---
 

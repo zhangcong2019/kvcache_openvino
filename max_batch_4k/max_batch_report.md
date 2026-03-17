@@ -2,18 +2,18 @@
 
 ## 1. Data Overview
 
-| model | prompt_tokens | output_tokens | max_num_batched_tokens | ttft_ms | tpot_ms |
-|-------|--------------|---------------|------------------------|---------|---------|
-| ovgenai | 10000 | 1024 | 1024 | 2479.83 | 24.05 |
-| sparse | 10000 | 1024 | 1024 | 1379.67 | 21.84 |
-| eviction | 10000 | 1024 | 1024 | 18189.45 | 19.58 |
-| kvcrush | 10000 | 1024 | 1024 | 18188.34 | 20.06 |
-| ovgenai | 10000 | 1024 | 4096 | 2256.68 | 24.02 |
-| sparse | 10000 | 1024 | 4096 | 1267.72 | 21.83 |
-| ovgenai | 10000 | 1024 | 4 | 71960.77 | 24.01 |
-| sparse | 10000 | 1024 | 4 | 83924.12 | 21.82 |
-| eviction | 10000 | 1024 | 4 | 69224.30 | 19.58 |
-| kvcrush | 10000 | 1024 | 4 | 69051.80 | 20.05 |
+| model    | prompt_tokens | output_tokens | max_num_batched_tokens | ttft_ms  | tpot_ms |
+| -------- | ------------- | ------------- | ---------------------- | -------- | ------- |
+| ovgenai  | 10000         | 1024          | 1024                   | 2479.83  | 24.05   |
+| sparse   | 10000         | 1024          | 1024                   | 1379.67  | 21.84   |
+| eviction | 10000         | 1024          | 1024                   | 18189.45 | 19.58   |
+| kvcrush  | 10000         | 1024          | 1024                   | 18188.34 | 20.06   |
+| ovgenai  | 10000         | 1024          | 4096                   | 2256.68  | 24.02   |
+| sparse   | 10000         | 1024          | 4096                   | 1267.72  | 21.83   |
+| ovgenai  | 10000         | 1024          | 4                      | 71960.77 | 24.01   |
+| sparse   | 10000         | 1024          | 4                      | 83924.12 | 21.82   |
+| eviction | 10000         | 1024          | 4                      | 69224.30 | 19.58   |
+| kvcrush  | 10000         | 1024          | 4                      | 69051.80 | 20.05   |
 
 ---
 
@@ -89,12 +89,12 @@ Larger batch size allows better batching optimization, reducing TTFT.
 
 ### 4.1 Batch Size Sensitivity
 
-| Strategy | Sensitivity to small batch | Recommendation |
-|----------|---------------------------|----------------|
-| sparse | Very High (60x) | Avoid very small batch sizes |
-| ovgenai | High (29x) | Avoid very small batch sizes |
-| eviction | Moderate (3.8x) | More robust to small batches |
-| kvcrush | Moderate (3.8x) | More robust to small batches |
+| Strategy | Sensitivity to small batch | Recommendation               |
+| -------- | -------------------------- | ---------------------------- |
+| sparse   | Very High (60x)            | Avoid very small batch sizes |
+| ovgenai  | High (29x)                 | Avoid very small batch sizes |
+| eviction | Moderate (3.8x)            | More robust to small batches |
+| kvcrush  | Moderate (3.8x)            | More robust to small batches |
 
 ### 4.2 Practical Recommendations
 
