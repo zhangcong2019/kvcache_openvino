@@ -1,0 +1,7 @@
+Model,framework,pass@1
+Qwen3-30B-A3B-Instruct-2507,vllm,0.683
+Qwen2.5-7B-Instruct,vllm,0.367
+Qwen2.5-7B-Instruct,ovgenai,0.297
+Qwen2.5-7B-Instruct,eviction,0.325
+Qwen2.5-7B-Instruct,kvcrush,0.31
+Qwen2.5-7B-Instruct,sparcity,0.28
