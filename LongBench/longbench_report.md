@@ -37,6 +37,10 @@
 | 2 | vllm | 29.0 |
 | 3 | sparsity | 26.4 |
 
+![Framework Comparison](./longbench_comparison.png)
+
+![Overall Score](./longbench_overall.png)
+
 ### 2.2 Score by Difficulty Level (10k)
 
 | Framework | Easy | Hard | Difference |
@@ -46,6 +50,8 @@
 | ovgenai | 33.9 | 24.8 | +9.1 |
 | vllm | 30.2 | 26.0 | +4.2 |
 | sparsity | 28.6 | 23.2 | +5.4 |
+
+![Easy vs Hard](./longbench_difficulty.png)
 
 ### 2.3 Score by Length Category (10k)
 
@@ -85,58 +91,15 @@
 
 ---
 
-## 4. Key Findings
 
-### 4.1 Best Strategy by Scenario
 
-| Scenario | Best Framework | Score |
-|----------|----------------|-------|
-| 10k Overall | eviction / kvcrush | 28.4 |
-| 30k Overall | ovgenai | 30.0 |
-| 10k Easy | eviction / kvcrush / ovgenai | 33.9 |
-| 30k Easy | ovgenai | 34.4 |
-| 10k Short | kvcrush | 36.1 |
-| 30k Short | ovgenai | 38.9 |
-
-### 4.2 Key Observations
-
-1. **ovgenai dominates at 30k**: Best overall score (30.0) and best on Short/Medium categories
-2. **eviction/kvcrush tie at 10k**: Both achieve 28.4 overall
-3. **sparsity underperforms**: Lowest scores across both 10k and 30k
-4. **vllm as baseline**: Stable performance, neither best nor worst
-5. **Long category degradation**: All frameworks show lower scores on Long at 30k
-
----
-
-## 5. Conclusion
-
-### 5.1 Strategy Selection Guide
-
-| Scenario | Recommended | Reason |
-|----------|-------------|--------|
-| Short prompts (10k) | eviction / kvcrush | Best overall score |
-| Long prompts (30k) | ovgenai | Best overall score |
-| Short output | ovgenai (30k) | 38.9 (highest) |
-| Long output | vllm / ovgenai | 25.0 at 10k |
-| Hard tasks | vllm | Most robust on Hard difficulty |
-| Easy tasks | ovgenai / eviction / kvcrush | ~34 |
-
-### 5.2 Summary
+### Summary
 
 - **ovgenai**: Best for long context (30k) scenarios, excellent on short outputs
 - **eviction/kvcrush**: Best for shorter context (10k), tied at 28.4
 - **sparsity**: Avoid - consistently underperforms other strategies
 - **vllm**: Reliable baseline with stable performance across all scenarios
 
----
-
-## 6. Generated Charts
-
-![Framework Comparison](./longbench_comparison.png)
-
-![Overall Score](./longbench_overall.png)
-
-![Easy vs Hard](./longbench_difficulty.png)
 
 ---
 
