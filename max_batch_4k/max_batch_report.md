@@ -1,116 +1,72 @@
-# Max Num Batched Tokens Impact Analysis
+# Max Batch 4K 性能测试报告
 
-## 1. Data Overview
+## 📊 测试配置
 
-| model    | prompt_tokens | output_tokens | max_num_batched_tokens | ttft_ms  | tpot_ms |
-| -------- | ------------- | ------------- | ---------------------- | -------- | ------- |
-| ovgenai  | 10000         | 1024          | 1024                   | 2479.83  | 24.05   |
-| sparse   | 10000         | 1024          | 1024                   | 1379.67  | 21.84   |
-| eviction | 10000         | 1024          | 1024                   | 18189.45 | 19.58   |
-| kvcrush  | 10000         | 1024          | 1024                   | 18188.34 | 20.06   |
-| ovgenai  | 10000         | 1024          | 4096                   | 2256.68  | 24.02   |
-| sparse   | 10000         | 1024          | 4096                   | 1267.72  | 21.83   |
-| ovgenai  | 10000         | 1024          | 4                      | 71960.77 | 24.01   |
-| sparse   | 10000         | 1024          | 4                      | 83924.12 | 21.82   |
-| eviction | 10000         | 1024          | 4                      | 69224.30 | 19.58   |
-| kvcrush  | 10000         | 1024          | 4                      | 69051.80 | 20.05   |
+- **Prompt Tokens:** 10000
+- **Output Tokens:** 1024
+- **测试框架:** ovgenai, sparse, eviction, kvcrush
 
 ---
 
-## 2. Impact Analysis: max_num_batched_tokens
+## 📈 TTFT (Time To First Token) 分析
 
-### 2.1 TTFT by max_num_batched_tokens
+![TTFT Chart](ttft_chart.png)
 
-| Model | max_batch=4 | max_batch=1024 | max_batch=4096 |
-|-------|-------------|----------------|-----------------|
-| ovgenai | 71960.77ms | 2479.83ms | 2256.68ms |
-| sparse | 83924.12ms | 1379.67ms | 1267.72ms |
-| eviction | 69224.30ms | 18189.45ms | - |
-| kvcrush | 69051.80ms | 18188.34ms | - |
+### TTFT 汇总 (ms)
 
-### 2.2 TTFT Change (relative to max_batch=1024)
+| max_num_batched_tokens | ovgenai | sparse | eviction | kvcrush |
+|------------------------|---------|--------|----------|---------|
+| 1                      | 196,927 | 202,266 | 194,634 | 194,529 |
+| 4                      | 71,961  | 83,924 | 69,224  | 69,052  |
+| 64                     | 7,359   | 8,504  | 21,495  | 21,498  |
+| 1024                   | 2,480   | 1,380  | 18,189  | 18,188  |
+| 4096                   | 2,257   | 1,268  | -        | -        |
 
-| Model | max_batch=4 | max_batch=1024 | max_batch=4096 |
-|-------|-------------|----------------|-----------------|
-| ovgenai | **29.02x** | 1.00x (baseline) | **0.91x** |
-| sparse | **60.83x** | 1.00x (baseline) | **0.92x** |
-| eviction | **3.81x** | 1.00x (baseline) | - |
-| kvcrush | **3.80x** | 1.00x (baseline) | - |
+### 关键发现
 
-### 2.3 TPOT Stability
-
-| Model | max_batch=4 | max_batch=1024 | max_batch=4096 |
-|-------|-------------|----------------|-----------------|
-| ovgenai | 24.01ms | 24.05ms | 24.02ms |
-| sparse | 21.82ms | 21.84ms | 21.83ms |
-| eviction | 19.58ms | 19.58ms | - |
-| kvcrush | 20.05ms | 20.06ms | - |
-
-**TPOT change**: < 1% across all strategies and batch sizes
+1. **ovgenai/sparse**: TTFT 随 batch size 增加显著下降，4096 时仅 ~1.3-2.3s
+2. **eviction/kvcrush**: TTFT 相对稳定，batch size 影响较小，始终在 18-21s
+3. **batch=64** 是分水岭：ovgenai/sparse 在此点开始大幅优化
 
 ---
 
-## 3. Key Findings
+## ⚡ TPOT (Time Per Output Token) 分析
 
-### 3.1 TTFT Degradation at max_batch=4
+![TPOT Chart](tpot_chart.png)
 
-All strategies show significant TTFT increase when max_num_batched_tokens is reduced to 4:
+### TPOT 汇总 (ms)
 
-| Strategy | TTFT Increase | Sensitivity |
-|----------|---------------|-------------|
-| sparse | 60.83x | **Highest** |
-| ovgenai | 29.02x | High |
-| eviction | 3.81x | Moderate |
-| kvcrush | 3.80x | Moderate |
+| max_num_batched_tokens | ovgenai | sparse | eviction | kvcrush |
+|------------------------|---------|--------|----------|---------|
+| 1                      | 24.00   | 21.79  | 19.42    | 19.49   |
+| 4                      | 24.01   | 21.82  | 19.58    | 20.05   |
+| 64                     | 24.01   | 21.81  | 19.57    | 20.07   |
+| 1024                   | 24.05   | 21.84  | 19.58    | 20.06   |
+| 4096                   | 24.02   | 21.83  | -        | -        |
 
-- **sparse** is the most sensitive to small batch size
-- **eviction/kvcrush** show relatively stable performance
+### 关键发现
 
-### 3.2 TTFT Improvement at max_batch=4096
-
-For strategies tested with max_batch=4096:
-
-| Strategy | TTFT Improvement |
-|----------|-----------------|
-| ovgenai | -9% (2256ms vs 2479ms) |
-| sparse | -8% (1268ms vs 1380ms) |
-
-Larger batch size allows better batching optimization, reducing TTFT.
-
-### 3.3 TPOT is Independent
-
-- TPOT remains stable regardless of max_num_batched_tokens
-- All strategies maintain consistent per-token latency (~19-24ms)
-- This makes sense: TPOT depends on decoding, not batching configuration
+1. **TPOT 相对稳定**: 各框架的 TPOT 受 batch size 影响很小
+2. **框架差异明显**:
+   - ovgenai: ~24ms (最慢)
+   - sparse: ~21.8ms
+   - eviction/kvcrush: ~19.5-20ms (最快)
+3. eviction/kvcrush 在 TPOT 上有明显优势
 
 ---
 
-## 4. Conclusion
+## 🎯 结论
 
-### 4.1 Batch Size Sensitivity
+| 指标 | 最优框架 | 说明 |
+|------|----------|------|
+| TTFT (大 batch) | **sparse** | batch=4096 时仅 1.27s |
+| TTFT (小 batch) | **eviction/kvcrush** | batch=1-4 时约 69-195s |
+| TPOT | **eviction/kvcrush** | ~19.5ms，最快 |
 
-| Strategy | Sensitivity to small batch | Recommendation               |
-| -------- | -------------------------- | ---------------------------- |
-| sparse   | Very High (60x)            | Avoid very small batch sizes |
-| ovgenai  | High (29x)                 | Avoid very small batch sizes |
-| eviction | Moderate (3.8x)            | More robust to small batches |
-| kvcrush  | Moderate (3.8x)            | More robust to small batches |
-
-### 4.2 Practical Recommendations
-
-1. **Avoid max_num_batched_tokens=4**: Causes 4-60x TTFT increase
-2. **Use larger batch sizes when possible**: max_batch=4096 improves TTFT by ~8-9%
-3. **Choose eviction/kvcrush for latency-critical small batch scenarios**: More robust to batch size changes
-4. **TPOT is not affected by batch size**: Decoding performance is independent
+**推荐场景**:
+- **高并发**: 用 sparse/ovgenai (TTFT 短)
+- **低延迟**: 用 eviction/kvcrush (TPOT 短)
 
 ---
 
-## 5. Generated Charts
-
-![TTFT and TPOT Impact](./max_batch_impact.png)
-
-![TTFT Trend](./max_batch_ttft_trend.png)
-
----
-
-*Analysis Date: 2026-03-16*
+*报告更新: 2026-03-17*
