@@ -1,4 +1,4 @@
-# Max Batch 4K Performance Test Report
+# Max Batch Performance Test Report
 
 ## 📊 Test Configuration
 
