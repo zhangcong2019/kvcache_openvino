@@ -19,31 +19,23 @@
 
 
 
-### Qwen2.5-7B Framework Performance Rankings
+### Qwen2.5-7B OpenVINO Performance Rankings
 
 ```
-1st  eviction   ████████████████████ 0.325  +16.1%
-2nd  kvcrush    ███████████████████  0.310  +10.7%
-3rd  ovgenai    ██████████████████   0.297   +6.1%
-4th  sparcity   █████████████████    0.280   (baseline)
+1st  eviction   ████████████████████ 0.325  
+2nd  kvcrush    ███████████████████  0.310  
+3rd  ovgenai    ██████████████████   0.297   
+4th  sparcity   █████████████████    0.280   
 ```
-
----
-
-## 🔍 Key Findings
-
-### 1. Model Size Impact is Significant
-- **Qwen3-30B (vllm)** achieves **68.3%** Pass@1, leading Qwen2.5-7B by approximately **31.6 percentage points**
-- Large models show clear advantages in code generation tasks
-
 
 ---
 
 ## 📝 Conclusions
 
-1. Large models (30B) significantly outperform small models (7B)
-2. Among 7B models, sparsification schemes rank as **eviction** > **kvcrush** > **ovgenai** > **sparcity**
-3. OpenVINO still has a **11%-24%** performance gap compared to vllm, possibly because vllm uses FP16 models while OpenVINO GenAI uses INT8 models
+1. LiveCodeBench: hundreds input token, hundred - thousand output token
+2. 7B model, sparsification schemes rank as **eviction** > **kvcrush** > **ovgenai** > **sparcity**
+3. Large models (30B) significantly outperform small models (7B)
+4. OpenVINO still has a **11%** performance gap compared to vllm, possibly because vllm uses FP16 models while OpenVINO GenAI uses INT8 models
 
 ---
 

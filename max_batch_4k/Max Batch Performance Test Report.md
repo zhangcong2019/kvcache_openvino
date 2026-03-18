@@ -14,19 +14,18 @@
 
 ### TTFT Summary (ms)
 
-| max_num_batched_tokens | ovgenai | sparse | eviction | kvcrush |
-|------------------------|---------|--------|----------|---------|
-| 1                      | 196,927 | 202,266 | 194,634 | 194,529 |
-| 4                      | 71,961  | 83,924 | 69,224  | 69,052  |
-| 64                     | 7,359   | 8,504  | 21,495  | 21,498  |
-| 1024                   | 2,480   | 1,380  | 18,189  | 18,188  |
-| 4096                   | 2,257   | 1,268  | -        | -        |
+| max_num_batched_tokens | ovgenai | sparse  | eviction | kvcrush |
+| ---------------------- | ------- | ------- | -------- | ------- |
+| 1                      | 196,927 | 202,266 | 194,634  | 194,529 |
+| 4                      | 71,961  | 83,924  | 69,224   | 69,052  |
+| 64                     | 7,359   | 8,504   | 21,495   | 21,498  |
+| 1024                   | 2,480   | 1,380   | 18,189   | 18,188  |
+| 4096                   | 2,257   | 1,268   | -        | -       |
 
 ### Key Findings
 
-1. **ovgenai/sparse**: TTFT decreases significantly as batch size increases, reaching only ~1.3-2.3s at 4096.
-2. **eviction/kvcrush**: TTFT is relatively stable, with limited impact from batch size, consistently around 18-21s.
-3. **batch=64** is a turning point: ovgenai/sparse begin to improve substantially from this point onward.
+1. TTFT decreases significantly as batch size increases, drop from 200s at 1 to 2.3s at 4096.
+2. **batch=64** is a turning point: ovgenai/sparse begin to improve substantially from this point onward.
 
 ---
 
@@ -47,18 +46,13 @@
 ### Key Findings
 
 1. **TPOT is relatively stable**: TPOT across frameworks is minimally affected by batch size.
-2. **Clear framework differences**:
-   - ovgenai: ~24ms (slowest)
-   - sparse: ~21.8ms
-   - eviction/kvcrush: ~19.5-20ms (fastest)
-3. eviction/kvcrush show a clear advantage in TPOT.
-4. max_num_batched_tokens will affect memory usage, cause OOM.
+2. max_num_batched_tokens will affect memory usage, **cause OOM**.
 
 ---
 
 ## 🎯 Conclusion
 
-Batch token count significantly impacts TTFT. MTP and speculative decoding can provide performance gains.
+Batch token count significantly impacts TTFT. **MTP and speculative decoding** can provide performance gains.
 
 ---
 
