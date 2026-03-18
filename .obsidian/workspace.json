@@ -93,7 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "f628cd9bb6162330",
@@ -211,11 +211,11 @@
   },
   "active": "6716cd181162eb38",
   "lastOpenFiles": [
-    "max_batch_4k/Max Batch Performance Test Report.md",
-    "OpenVINO GenAI.md",
-    "benchmark_analysis/KV Cache Strategy Performance Benchmark Analysis vs prompt tokens.md",
     "livecodebench/LiveCodeBench Code Generation Evaluation Results Report.md",
     "LongBench/LongBench Benchmark Analysis.md",
+    "OpenVINO GenAI.md",
+    "max_batch_4k/Max Batch Performance Test Report.md",
+    "benchmark_analysis/KV Cache Strategy Performance Benchmark Analysis vs prompt tokens.md",
     "output_tokens_4k/Output Tokens Impact Analysis.md",
     "Pasted image 20260317161826.png",
     "Pasted image 20260317161724.png",
