@@ -211,6 +211,8 @@
   },
   "active": "6716cd181162eb38",
   "lastOpenFiles": [
+    "Pasted image 20260318152526.png",
+    "Pasted image 20260318152523.png",
     "livecodebench/LiveCodeBench Code Generation Evaluation Results Report.md",
     "LongBench/LongBench Benchmark Analysis.md",
     "OpenVINO GenAI.md",
@@ -225,7 +227,6 @@
     "output_tokens_4k/output_tokens_impact.png",
     "LongBench/longbench_comparison.png",
     "max_batch_4k/ttft_chart.png",
-    "max_batch_4k/tpot_chart.png",
-    "max_batch_4k/max_batch_ttft_trend.png"
+    "max_batch_4k/tpot_chart.png"
   ]
 }

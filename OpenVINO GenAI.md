@@ -41,10 +41,12 @@ Configurations:
 
 # Conclusion:
 - sparse (XAttention), compared with original ovgenai
-	- performance is 3x TTFT, 1.5x TPOT
-	- LiveCodeBench and LongBench v2 is 10% worse
+	- performance is ~3x TTFT, ~1.5x TPOT
+	- LiveCodeBench and LongBench v2 is ~10% worse
 - eviction (H2O, SnapKV, R-KV) 
-	- TPOT is better, but TTFT is 10x slower
+	- TPOT is better, but TTFT is ~10x slower
 	- LiveCodeBench and LongBench v2, comparable to ov genai
 	- Performance needs optimization. Eviction is implemented in ov genai, but attention kernel is implemented in ov gpu plugin. Eviction should be integrated into flash attention kernel
+![](Pasted%20image%2020260318152526.png)
 - kvcrush improvement upon eviction is negligible on LiveCodeBench and LongBench v2
+- LLM attention kernel is fast evolving, require kernel enabling effort to support new models.
