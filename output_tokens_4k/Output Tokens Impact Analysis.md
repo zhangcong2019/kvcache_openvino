@@ -19,21 +19,21 @@
 
 ### 2.1 TTFT Change
 
-| Model | TTFT @ 1024 | TTFT @ 4096 | Change |
-|-------|-------------|-------------|--------|
-| ovgenai | 2479.83ms | 2479.64ms | **-0.01%** |
-| sparse | 1379.67ms | 1379.16ms | **-0.04%** |
-| eviction | 18189.45ms | 18178.26ms | **-0.06%** |
-| kvcrush | 18188.34ms | 18184.07ms | **-0.02%** |
+| Model    | TTFT @ 1024 | TTFT @ 4096 | Change     |
+| -------- | ----------- | ----------- | ---------- |
+| ovgenai  | 2479.83ms   | 2479.64ms   | **-0.01%** |
+| sparse   | 1379.67ms   | 1379.16ms   | **-0.04%** |
+| eviction | 18189.45ms  | 18178.26ms  | **-0.06%** |
+| kvcrush  | 18188.34ms  | 18184.07ms  | **-0.02%** |
 
 ### 2.2 TPOT Change
 
-| Model | TPOT @ 1024 | TPOT @ 4096 | Change |
-|-------|-------------|-------------|--------|
-| ovgenai | 24.05ms | 24.81ms | **+3.16%** |
-| sparse | 21.84ms | 21.86ms | **+0.09%** |
-| eviction | 19.58ms | 19.49ms | **-0.46%** |
-| kvcrush | 20.06ms | 20.00ms | **-0.30%** |
+| Model    | TPOT @ 1024 | TPOT @ 4096 | Change     |
+| -------- | ----------- | ----------- | ---------- |
+| ovgenai  | 24.05ms     | 24.81ms     | **+3.16%** |
+| sparse   | 21.84ms     | 21.86ms     | **+0.09%** |
+| eviction | 19.58ms     | 19.49ms     | **-0.46%** |
+| kvcrush  | 20.06ms     | 20.00ms     | **-0.30%** |
 
 ![TTFT vs TPOT Impact](./output_tokens_impact.png)
 ![Change Percentage](./output_tokens_change_pct.png)

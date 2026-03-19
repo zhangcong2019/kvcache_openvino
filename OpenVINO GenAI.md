@@ -13,7 +13,7 @@ OV GenAI implements several sparsity and eviction algorithms, likely because Ope
 # Optimizations in OV GenAI:
 - **Sparsity**: XAttention (XAttention CM kernel implemented by the PRC team), Triangle
 - **Eviction**: H2O, SnapKV, R-KV
-- **KVCrush**: additional optimization built on top of eviction
+- **KVCrush**: additional optimization built on top of eviction (designed by Intel)
 - Speculative decoding
 - Continuous batching
 - Visual token pruning: CDPruner
