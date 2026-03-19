@@ -32,10 +32,10 @@
 #### 30k Input Length
 
 | Rank | Framework | Overall |
-|------|-----------|---------|
-| 1 | ovgenai | 30.0 |
-| 2 | vllm | 29.0 |
-| 3 | sparsity | 26.4 |
+| ---- | --------- | ------- |
+| 1    | ovgenai   | 30.0    |
+| 2    | vllm      | 29.0    |
+| 3    | sparsity  | 26.4    |
 
 ![Framework Comparison](./longbench_comparison.png)
 

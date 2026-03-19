@@ -62,7 +62,7 @@
 
 1. **sparse has the best scalability**: TTFT grows only 7.75x from 5k to 30k, while ovgenai grows 18.31x
 2. **eviction/kvcrush has the best TPOT** (~20ms), but TTFT is too high (4-18 seconds) - suitable for scenarios where first-token latency is not critical
-3. eviction/kvcrush implementation consumes extra memory usage and impact performance, especially when input token number increases, need optimization both on memory and performance. 
+3. eviction/kvcrush implementation consumes **extra memory usage and impact performance**, especially when input token number increases, need optimization both on memory and performance. 
 
 
 

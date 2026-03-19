@@ -5,8 +5,8 @@
 ---
 
 # Why OV GenAI?
-Sparsity and eviction techniques are not yet widely integrated in mainstream frameworks such as vLLM and llama.cpp.
-OV GenAI implements several sparsity and eviction algorithms, likely because OpenVINO was originally optimized for CNN-based vision workloads, while LLM and multimodal workloads require handling massive token counts and KV cache usage.
+Sparsity and eviction are not yet widely integrated in mainstream frameworks such as vLLM and llama.cpp.
+OV GenAI implements several sparsity and eviction algorithms, likely because OpenVINO was originally optimized for vision workloads, while multimodal workloads require handling massive token counts and KV cache usage.
 
 ---
 
@@ -42,7 +42,7 @@ Configurations:
 # Conclusion:
 - sparse (XAttention), compared with original ovgenai
 	- performance is ~3x TTFT, ~1.5x TPOT
-	- LiveCodeBench and LongBench v2 is ~10% worse
+	- LiveCodeBench and LongBench v2 is ~10% worse （-3 points）
 - eviction (H2O, SnapKV, R-KV) 
 	- TPOT is better, but TTFT is ~10x slower
 	- LiveCodeBench and LongBench v2, comparable to ov genai

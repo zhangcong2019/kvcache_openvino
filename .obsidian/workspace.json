@@ -27,16 +27,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "OpenVINO GenAI.md",
+                "file": "livecodebench/LiveCodeBench Code Generation Evaluation Results Report.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "OpenVINO GenAI"
+              "title": "LiveCodeBench Code Generation Evaluation Results Report"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -93,7 +92,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 396.5110321044922
   },
   "right": {
     "id": "f628cd9bb6162330",
@@ -209,24 +208,23 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6716cd181162eb38",
+  "active": "21ef14270bed6bc8",
   "lastOpenFiles": [
-    "Pasted image 20260318152526.png",
     "Pasted image 20260318152523.png",
-    "livecodebench/LiveCodeBench Code Generation Evaluation Results Report.md",
-    "LongBench/LongBench Benchmark Analysis.md",
     "OpenVINO GenAI.md",
-    "max_batch_4k/Max Batch Performance Test Report.md",
-    "benchmark_analysis/KV Cache Strategy Performance Benchmark Analysis vs prompt tokens.md",
-    "output_tokens_4k/Output Tokens Impact Analysis.md",
+    "Pasted image 20260318152526.png",
     "Pasted image 20260317161826.png",
+    "max_batch_4k/Max Batch Performance Test Report.md",
+    "output_tokens_4k/Output Tokens Impact Analysis.md",
+    "benchmark_analysis/KV Cache Strategy Performance Benchmark Analysis vs prompt tokens.md",
+    "LongBench/LongBench Benchmark Analysis.md",
+    "livecodebench/LiveCodeBench Code Generation Evaluation Results Report.md",
     "Pasted image 20260317161724.png",
     "Pasted image 20260317161929.png",
     "max_batch_4k/max_batch_impact.png",
     "benchmark_analysis/scalability_analysis.png",
     "output_tokens_4k/output_tokens_impact.png",
     "LongBench/longbench_comparison.png",
-    "max_batch_4k/ttft_chart.png",
-    "max_batch_4k/tpot_chart.png"
+    "max_batch_4k/ttft_chart.png"
   ]
 }
